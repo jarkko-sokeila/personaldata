@@ -1,10 +1,8 @@
 package com.sokeila.personaldata.services;
 
 import com.sokeila.personaldata.data.DataGenerator;
-import com.sokeila.personaldata.model.Company;
-import com.sokeila.personaldata.model.Country;
-import com.sokeila.personaldata.model.Person;
-import com.sokeila.personaldata.model.Sex;
+import com.sokeila.personaldata.model.*;
+import com.sokeila.personaldata.services.bank.IbanGenerator;
 import com.sokeila.personaldata.utils.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +18,12 @@ public class PersonGenerator extends RandomGenerator {
     private static final Logger log = LoggerFactory.getLogger(PersonGenerator.class);
 
     private final PhoneNumberGenerator phoneNumberGenerator;
+    private final IbanGenerator ibanGenerator;
 
     @Autowired
-    public PersonGenerator(PhoneNumberGenerator phoneNumberGenerator) {
+    public PersonGenerator(PhoneNumberGenerator phoneNumberGenerator, IbanGenerator ibanGenerator) {
         this.phoneNumberGenerator = phoneNumberGenerator;
+        this.ibanGenerator = ibanGenerator;
     }
 
     public Person generatePerson() {
@@ -39,14 +39,16 @@ public class PersonGenerator extends RandomGenerator {
         person.setLastName(getRandomLastname(country));
         person.setEmail(getRandomEmail(person.getFirstName(), person.getLastName()));
         person.setPhone(phoneNumberGenerator.generatePhoneNumber(country));
+        person.setPhysical(generatePhysical());
         person.setCompany(getRandomCompany());
+        person.setBankInformation(getBankInformation(country));
         return person;
     }
 
     private LocalDate getRandomBirthDate() {
         int years = RandomUtils.getRandomNumber(1,99);
         int month = RandomUtils.getRandomNumber(1,12);
-        int dayOfMonth = RandomUtils.getRandomNumber(1,31);
+        int dayOfMonth = RandomUtils.getRandomNumber(1,30);
         LocalDate birthDay = LocalDate.now();
         log.info("Random birthdate day of month: {}, month: {}, years: {}", dayOfMonth, month, years);
 
@@ -92,9 +94,33 @@ public class PersonGenerator extends RandomGenerator {
         return getRandomValue(list);
     }
 
+    private Physical generatePhysical() {
+        Physical physical = new Physical();
+
+        physical.setBloodType(generateRandomBloodType());
+
+        return physical;
+    }
+
+    private String generateRandomBloodType() {
+        List<String> bloodTypes = Arrays.asList("AB+","AB−","A+","A−","B+","B−","O+","O−");
+        return getRandomValue(bloodTypes);
+    }
+
     private Company getRandomCompany() {
         Company company = new Company();
         company.setName(getRandomValue(DataGenerator.getCompanyNames()));
         return company;
+    }
+
+    private BankInformation getBankInformation(Country country) {
+        String iban = ibanGenerator.generateRandomIban(country);
+        if(iban == null)
+            return null;
+
+        BankInformation bankInformation = new BankInformation();
+        bankInformation.setIban(iban);
+
+        return bankInformation;
     }
 }

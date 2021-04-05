@@ -45,7 +45,7 @@ public class PhoneNumberGenerator {
                 phone = generatePhoneNumber(countryCode, length);
                 phone.setFullNumber(phone.getCountryCode() + phone.getPhoneNumber().substring(1));
                 return phone;
-            case USA:
+            case UNITED_STATES:
                 countryCode = properties.getProperty("phonenumber.country-code", "+1");
                 length = properties.getProperty("phonenumber.length", "10");
                 phone = generatePhoneNumber(countryCode, length);

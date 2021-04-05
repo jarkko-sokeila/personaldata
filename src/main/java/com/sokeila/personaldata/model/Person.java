@@ -12,7 +12,9 @@ public class Person {
     private String email;
     private Phone phone;
 
+    private Physical physical;
     private Company company;
+    private BankInformation bankInformation;
 
     public Country getCountry() {
         return country;
@@ -78,11 +80,27 @@ public class Person {
         this.phone = phone;
     }
 
+    public Physical getPhysical() {
+        return physical;
+    }
+
+    public void setPhysical(Physical physical) {
+        this.physical = physical;
+    }
+
     public Company getCompany() {
         return company;
     }
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public BankInformation getBankInformation() {
+        return bankInformation;
+    }
+
+    public void setBankInformation(BankInformation bankInformation) {
+        this.bankInformation = bankInformation;
     }
 }
