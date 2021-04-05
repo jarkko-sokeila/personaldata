@@ -2,6 +2,7 @@ package com.sokeila.personaldata.model;
 
 public class Company {
     private String name;
+    private String salary;
 
     public String getName() {
         return name;
@@ -9,5 +10,13 @@ public class Company {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSalary() {
+        return salary;
+    }
+
+    public void setSalary(String salary) {
+        this.salary = salary;
     }
 }

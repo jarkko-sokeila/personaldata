@@ -2,6 +2,7 @@ package com.sokeila.personaldata.services;
 
 import com.sokeila.personaldata.data.DataGenerator;
 import com.sokeila.personaldata.model.*;
+import com.sokeila.personaldata.services.bank.CreditCardGenerator;
 import com.sokeila.personaldata.services.bank.IbanGenerator;
 import com.sokeila.personaldata.utils.RandomUtils;
 import org.slf4j.Logger;
@@ -19,11 +20,13 @@ public class PersonGenerator extends RandomGenerator {
 
     private final PhoneNumberGenerator phoneNumberGenerator;
     private final IbanGenerator ibanGenerator;
+    private final CreditCardGenerator creditCardGenerator;
 
     @Autowired
-    public PersonGenerator(PhoneNumberGenerator phoneNumberGenerator, IbanGenerator ibanGenerator) {
+    public PersonGenerator(PhoneNumberGenerator phoneNumberGenerator, IbanGenerator ibanGenerator, CreditCardGenerator creditCardGenerator) {
         this.phoneNumberGenerator = phoneNumberGenerator;
         this.ibanGenerator = ibanGenerator;
+        this.creditCardGenerator = creditCardGenerator;
     }
 
     public Person generatePerson() {
@@ -48,7 +51,14 @@ public class PersonGenerator extends RandomGenerator {
     private LocalDate getRandomBirthDate() {
         int years = RandomUtils.getRandomNumber(1,99);
         int month = RandomUtils.getRandomNumber(1,12);
-        int dayOfMonth = RandomUtils.getRandomNumber(1,30);
+        int dayOfMonth;
+        if(month == 2)
+            dayOfMonth = RandomUtils.getRandomNumber(1,28);
+        else if(month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+            dayOfMonth = RandomUtils.getRandomNumber(1,31);
+        else
+            dayOfMonth = RandomUtils.getRandomNumber(1,30);
+
         LocalDate birthDay = LocalDate.now();
         log.info("Random birthdate day of month: {}, month: {}, years: {}", dayOfMonth, month, years);
 
@@ -79,7 +89,7 @@ public class PersonGenerator extends RandomGenerator {
     private String getRandomEmail(String firstName, String lastName) {
         String domain = getRandomValue(DataGenerator.getEmailDomains());
 
-        return firstName + "." + lastName + "@" + domain;
+        return firstName.toLowerCase() + "." + lastName.toLowerCase() + "@" + domain;
     }
 
     private Country getRandomNationality() {
@@ -110,17 +120,24 @@ public class PersonGenerator extends RandomGenerator {
     private Company getRandomCompany() {
         Company company = new Company();
         company.setName(getRandomValue(DataGenerator.getCompanyNames()));
+        company.setSalary("" + RandomUtils.getRandomNumber(15, 60) * 100);
+
         return company;
     }
 
     private BankInformation getBankInformation(Country country) {
         String iban = ibanGenerator.generateRandomIban(country);
-        if(iban == null)
-            return null;
-
         BankInformation bankInformation = new BankInformation();
         bankInformation.setIban(iban);
+        bankInformation.setCreditCard(generateRandomCreditCard());
 
         return bankInformation;
+    }
+
+    private CreditCard generateRandomCreditCard() {
+        List<CreditCardType> list = Arrays.asList(CreditCardType.values());
+        CreditCardType creditCardType = getRandomValue(list);
+
+        return creditCardGenerator.generateCreditCard(creditCardType);
     }
 }

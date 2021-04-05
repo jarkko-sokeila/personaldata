@@ -80,9 +80,7 @@ public class IbanGenerator {
         if(ibanLength == -1)
             return null;
 
-        String ibanNumber = generateIban(iban, ibanLength);
-
-        return ibanNumber;
+        return generateIban(iban, ibanLength);
     }
 
     private int getIbanLength(IBAN iban) {
@@ -112,7 +110,7 @@ public class IbanGenerator {
         //numberStr = "79433846350988151800";
         BigInteger bigInteger = new BigInteger(numberStr);
         BigInteger mod = bigInteger.mod(new BigInteger("97"));
-        int checkNumber = (int) (98 - mod.intValue());
+        int checkNumber = 98 - mod.intValue();
 
         String checkNumberStr;
         if(checkNumber < 10)

@@ -5,7 +5,7 @@ import com.sokeila.personaldata.services.bank.IBAN;
 public enum Country {
     FINLAND("fi", IBAN.FI), UNITED_STATES("us");
 
-    private String locale;
+    private final String locale;
     private IBAN iban;
 
     Country(String locale, IBAN iban) {
