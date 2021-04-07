@@ -22,6 +22,8 @@ public class DataGenerator {
     private static final Map<Country, Set<String>> lastNames = new HashMap<>();
     private static final Set<String> emailDomains = new HashSet<>();
     private static final Set<String> companyNames = new HashSet<>();
+    private static final Map<Country, Set<String>> addresses = new HashMap<>();
+    private static final Map<Country, Set<String>> streets = new HashMap<>();
 
     static {
         try {
@@ -29,6 +31,8 @@ public class DataGenerator {
             loadLastNames();
             loadEmailDomains();
             loadCompanyNames();
+            loadAddresses();
+            loadStreets();
         } catch (IOException e) {
             log.error("Error while loading data", e);
         }
@@ -39,7 +43,7 @@ public class DataGenerator {
         Objects.requireNonNull(country, "Country is mandatory");
 
         Map<Country, Set<String>> firstNameMap = firstNames.get(sex);
-        Set<String> names = getNamesFromMap(country, firstNameMap);
+        Set<String> names = getValuesFromMap(country, firstNameMap);
 
         return new ArrayList<>(names);
     }
@@ -47,20 +51,9 @@ public class DataGenerator {
     public static List<String> getLastNames(Country country) {
         Objects.requireNonNull(country, "Country is mandatory");
 
-        Set<String> names = getNamesFromMap(country, lastNames);
+        Set<String> names = getValuesFromMap(country, lastNames);
 
         return new ArrayList<>(names);
-    }
-
-    private static Set<String> getNamesFromMap(Country country, Map<Country, Set<String>> namesMap) {
-        Set<String> names = namesMap.get(country);
-        if(CollectionUtils.isEmpty(names)) {
-            names = namesMap.get(null);
-        }
-        if(CollectionUtils.isEmpty(names)) {
-            throw new IllegalStateException("Could not resolve names for country " + country);
-        }
-        return names;
     }
 
     public static List<String> getEmailDomains() {
@@ -69,6 +62,35 @@ public class DataGenerator {
 
     public static List<String> getCompanyNames() {
         return new ArrayList<>(companyNames);
+    }
+
+    public static List<String> getAddresses(Country country) {
+        Objects.requireNonNull(country, "Country is mandatory");
+
+        Set<String> values = getValuesFromMap(country, addresses);
+        List<String> result = new ArrayList<>(values);
+        Collections.shuffle(result);
+
+        return result;
+    }
+
+    public static List<String> getStreets(Country country) {
+        Objects.requireNonNull(country, "Country is mandatory");
+
+        Set<String> values = getValuesFromMap(country, streets);
+
+        return new ArrayList<>(values);
+    }
+
+    private static Set<String> getValuesFromMap(Country country, Map<Country, Set<String>> valuesMap) {
+        Set<String> values = valuesMap.get(country);
+        if(CollectionUtils.isEmpty(values)) {
+            values = valuesMap.get(null);
+        }
+        if(CollectionUtils.isEmpty(values)) {
+            throw new IllegalStateException("Could not resolve values for country " + country);
+        }
+        return values;
     }
 
     private static void loadFirstNames() throws IOException {
@@ -104,24 +126,16 @@ public class DataGenerator {
     }
 
     private static void loadLastNames() throws IOException {
-        loadLastNames(null, "data/lastnames/lastnames.txt");
+        loadCountryData(null, "data/lastnames/lastnames.txt", lastNames);
 
         for(Country country : Country.values()) {
             try {
                 String lastNamesFile = "data/lastnames/lastnames_" + country.getLocale() + ".txt";
-                loadLastNames(country, lastNamesFile);
+                loadCountryData(country, lastNamesFile, lastNames);
             } catch (IOException e) {
                 log.warn("Could not load last names for country " + country);
                 log.debug("Error", e);
             }
-        }
-    }
-
-    private static void loadLastNames(Country country, String source) throws IOException {
-        InputStream resource = new ClassPathResource(source).getInputStream();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8)) ) {
-            Set<String> lastNamesData = reader.lines().collect(Collectors.toSet());
-            lastNames.put(country, lastNamesData);
         }
     }
 
@@ -134,6 +148,42 @@ public class DataGenerator {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8)) ) {
             Set<String> companyNameData = reader.lines().collect(Collectors.toSet());
             companyNames.addAll(companyNameData);
+        }
+    }
+
+    private static void loadAddresses() throws IOException {
+        loadCountryData(null,"data/address/city.txt", addresses);
+
+        for(Country country : Country.values()) {
+            try {
+                String citiesFile = "data/address/city_" + country.getLocale() + ".txt";
+                loadCountryData(country, citiesFile, addresses);
+            } catch (IOException e) {
+                log.warn("Could not load cities for country " + country);
+                log.debug("Error", e);
+            }
+        }
+    }
+
+    private static void loadStreets() throws IOException {
+        loadCountryData(null,"data/address/street.txt", streets);
+
+        for(Country country : Country.values()) {
+            try {
+                String streetsFile = "data/address/street_" + country.getLocale() + ".txt";
+                loadCountryData(country, streetsFile, streets);
+            } catch (IOException e) {
+                log.warn("Could not load streets for country " + country);
+                log.debug("Error", e);
+            }
+        }
+    }
+
+    private static void loadCountryData(Country country, String source, Map<Country, Set<String>> dataMap) throws IOException {
+        InputStream resource = new ClassPathResource(source).getInputStream();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8))) {
+            Set<String> data = reader.lines().collect(Collectors.toSet());
+            dataMap.put(country, data);
         }
     }
 }

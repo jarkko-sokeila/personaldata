@@ -21,12 +21,14 @@ public class PersonGenerator extends RandomGenerator {
     private final PhoneNumberGenerator phoneNumberGenerator;
     private final IbanGenerator ibanGenerator;
     private final CreditCardGenerator creditCardGenerator;
+    private final AddressGenerator addressGenerator;
 
     @Autowired
-    public PersonGenerator(PhoneNumberGenerator phoneNumberGenerator, IbanGenerator ibanGenerator, CreditCardGenerator creditCardGenerator) {
+    public PersonGenerator(PhoneNumberGenerator phoneNumberGenerator, IbanGenerator ibanGenerator, CreditCardGenerator creditCardGenerator, AddressGenerator addressGenerator) {
         this.phoneNumberGenerator = phoneNumberGenerator;
         this.ibanGenerator = ibanGenerator;
         this.creditCardGenerator = creditCardGenerator;
+        this.addressGenerator = addressGenerator;
     }
 
     public Person generatePerson() {
@@ -45,6 +47,8 @@ public class PersonGenerator extends RandomGenerator {
         person.setPhysical(generatePhysical());
         person.setCompany(getRandomCompany());
         person.setBankInformation(getBankInformation(country));
+        person.setAddress(addressGenerator.generateAddress(country));
+
         return person;
     }
 
@@ -108,6 +112,7 @@ public class PersonGenerator extends RandomGenerator {
         Physical physical = new Physical();
 
         physical.setBloodType(generateRandomBloodType());
+        physical.setHairColor(getRandomValue(Arrays.asList("Black", "White", "Gray", "Red", "Light brown", "Brown", "Dark brown", "Blond")));
 
         return physical;
     }

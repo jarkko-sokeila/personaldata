@@ -12,6 +12,7 @@ public class Person {
     private String email;
     private Phone phone;
 
+    private Address address;
     private Physical physical;
     private Company company;
     private BankInformation bankInformation;
@@ -78,6 +79,14 @@ public class Person {
 
     public void setPhone(Phone phone) {
         this.phone = phone;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public Physical getPhysical() {
