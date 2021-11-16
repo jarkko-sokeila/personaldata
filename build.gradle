@@ -13,6 +13,14 @@ println currentJvm
 
 println GradleVersion.current().toString()
 
+jar {
+    manifest {
+        attributes (
+                'Main-Class': 'com.sokeila.personaldata.PersonalDataApplication'
+        )
+    }
+}
+
 repositories {
     mavenCentral()
 
