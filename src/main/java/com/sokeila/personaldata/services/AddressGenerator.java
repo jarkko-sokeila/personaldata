@@ -45,8 +45,8 @@ public class AddressGenerator extends  RandomGenerator {
             throw new IllegalStateException("Zip range value is invalid, Data [" + zipData + "]");
         }
 
-        int start = Integer.parseInt(zipRange[0]);
-        int end = Integer.parseInt(zipRange[1]);
+        int start = Integer.parseInt(zipRange[0].trim());
+        int end = Integer.parseInt(zipRange[1].trim());
 
         if(start > end) {
             throw new IllegalStateException("Zip range start value must be smaller than end value, Data [" + zipData + "]");
