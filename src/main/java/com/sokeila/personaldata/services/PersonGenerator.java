@@ -22,23 +22,34 @@ public class PersonGenerator extends RandomGenerator {
     private final IbanGenerator ibanGenerator;
     private final CreditCardGenerator creditCardGenerator;
     private final AddressGenerator addressGenerator;
+    private final SsnGenerator ssnGenerator;
 
     @Autowired
-    public PersonGenerator(PhoneNumberGenerator phoneNumberGenerator, IbanGenerator ibanGenerator, CreditCardGenerator creditCardGenerator, AddressGenerator addressGenerator) {
+    public PersonGenerator(PhoneNumberGenerator phoneNumberGenerator, IbanGenerator ibanGenerator, CreditCardGenerator creditCardGenerator, AddressGenerator addressGenerator, SsnGenerator ssnGenerator) {
         this.phoneNumberGenerator = phoneNumberGenerator;
         this.ibanGenerator = ibanGenerator;
         this.creditCardGenerator = creditCardGenerator;
         this.addressGenerator = addressGenerator;
+        this.ssnGenerator = ssnGenerator;
     }
 
     public Person generatePerson() {
         Country country = getRandomNationality();
+        return generatePerson(country);
+    }
+
+    public Person generatePerson(Country country) {
+        if(country == null) {
+            country = getRandomNationality();
+        }
         Sex sex = getRandomSex();
 
         Person person = new Person();
+        person.setGuid(UUID.randomUUID().toString());
         person.setCountry(country);
         person.setSex(sex);
         person.setBirthDate(getRandomBirthDate());
+        person.setSsn(ssnGenerator.generateSsn(country, sex, person.getBirthDate()));
         person.setAge(calculateAge(person.getBirthDate()));
         person.setFirstName(getRandomFirstName(country, sex));
         person.setLastName(getRandomLastname(country));

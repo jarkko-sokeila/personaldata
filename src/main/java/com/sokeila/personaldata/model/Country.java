@@ -24,4 +24,13 @@ public enum Country {
     public IBAN getIban() {
         return iban;
     }
+
+    public static Country fromString(String text) {
+        for (Country c : Country.values()) {
+            if (c.locale.equalsIgnoreCase(text) || c.toString().equalsIgnoreCase(text)) {
+                return c;
+            }
+        }
+        return null;
+    }
 }

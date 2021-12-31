@@ -3,9 +3,11 @@ package com.sokeila.personaldata.model;
 import java.time.LocalDate;
 
 public class Person {
+    private String guid;
     private Country country;
     private Sex sex;
     private LocalDate birthDate;
+    private String ssn;
     private Integer age;
     private String firstName;
     private String lastName;
@@ -16,6 +18,14 @@ public class Person {
     private Physical physical;
     private Company company;
     private BankInformation bankInformation;
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
 
     public Country getCountry() {
         return country;
@@ -31,6 +41,14 @@ public class Person {
 
     public void setSex(Sex sex) {
         this.sex = sex;
+    }
+
+    public String getSsn() {
+        return ssn;
+    }
+
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
     }
 
     public LocalDate getBirthDate() {
