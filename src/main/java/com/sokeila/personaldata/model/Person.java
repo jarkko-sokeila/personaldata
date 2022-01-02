@@ -19,6 +19,7 @@ public class Person {
     private Company company;
     private BankInformation bankInformation;
     private Geo geo;
+    private Online online;
 
     public String getGuid() {
         return guid;
@@ -138,5 +139,13 @@ public class Person {
 
     public void setGeo(Geo geo) {
         this.geo = geo;
+    }
+
+    public Online getOnline() {
+        return online;
+    }
+
+    public void setOnline(Online online) {
+        this.online = online;
     }
 }

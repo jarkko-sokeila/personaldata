@@ -140,7 +140,7 @@ public class DataGenerator {
     }
 
     private static void loadEmailDomains() {
-        emailDomains.addAll(Arrays.asList("gmail.com", "hotmail.com"));
+        emailDomains.addAll(Arrays.asList("gmail.com", "hotmail.com", "yahoo.com", "mail.com"));
     }
 
     private static void loadCompanyNames() throws IOException {

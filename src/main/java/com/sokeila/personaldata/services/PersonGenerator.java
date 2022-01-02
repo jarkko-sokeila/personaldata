@@ -23,14 +23,16 @@ public class PersonGenerator extends RandomGenerator {
     private final CreditCardGenerator creditCardGenerator;
     private final AddressGenerator addressGenerator;
     private final SsnGenerator ssnGenerator;
+    private final OnlineGenerator onlineGenerator;
 
     @Autowired
-    public PersonGenerator(PhoneNumberGenerator phoneNumberGenerator, IbanGenerator ibanGenerator, CreditCardGenerator creditCardGenerator, AddressGenerator addressGenerator, SsnGenerator ssnGenerator) {
+    public PersonGenerator(PhoneNumberGenerator phoneNumberGenerator, IbanGenerator ibanGenerator, CreditCardGenerator creditCardGenerator, AddressGenerator addressGenerator, SsnGenerator ssnGenerator, OnlineGenerator onlineGenerator) {
         this.phoneNumberGenerator = phoneNumberGenerator;
         this.ibanGenerator = ibanGenerator;
         this.creditCardGenerator = creditCardGenerator;
         this.addressGenerator = addressGenerator;
         this.ssnGenerator = ssnGenerator;
+        this.onlineGenerator = onlineGenerator;
     }
 
     public Person generatePerson() {
@@ -60,6 +62,7 @@ public class PersonGenerator extends RandomGenerator {
         person.setBankInformation(getBankInformation(country));
         person.setAddress(addressGenerator.generateAddress(country));
         person.setGeo(getRandomGeo());
+        person.setOnline(onlineGenerator.generateOnline(person.getFirstName(), person.getLastName()));
 
         return person;
     }
