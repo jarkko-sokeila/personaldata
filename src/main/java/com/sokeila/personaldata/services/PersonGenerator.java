@@ -59,6 +59,7 @@ public class PersonGenerator extends RandomGenerator {
         person.setCompany(getRandomCompany());
         person.setBankInformation(getBankInformation(country));
         person.setAddress(addressGenerator.generateAddress(country));
+        person.setGeo(getRandomGeo());
 
         return person;
     }
@@ -155,5 +156,21 @@ public class PersonGenerator extends RandomGenerator {
         CreditCardType creditCardType = getRandomValue(list);
 
         return creditCardGenerator.generateCreditCard(creditCardType);
+    }
+
+    private Geo getRandomGeo() {
+        Geo geo = new Geo();
+
+        double latitude = -90 + 180 * getRandomGenerator().nextDouble();
+        double longitude = -180 + 360 * getRandomGenerator().nextDouble();
+
+        double scale = Math.pow(10, 4);
+        latitude = Math.round(latitude * scale) / scale;
+        longitude = Math.round(longitude * scale) / scale;
+        geo.setLatitude(latitude);
+        geo.setLongitude(longitude);
+        geo.setGeoCoordinates(latitude + ", " + longitude);
+
+        return geo;
     }
 }

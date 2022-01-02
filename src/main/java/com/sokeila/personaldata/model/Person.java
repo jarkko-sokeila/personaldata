@@ -18,6 +18,7 @@ public class Person {
     private Physical physical;
     private Company company;
     private BankInformation bankInformation;
+    private Geo geo;
 
     public String getGuid() {
         return guid;
@@ -129,5 +130,13 @@ public class Person {
 
     public void setBankInformation(BankInformation bankInformation) {
         this.bankInformation = bankInformation;
+    }
+
+    public Geo getGeo() {
+        return geo;
+    }
+
+    public void setGeo(Geo geo) {
+        this.geo = geo;
     }
 }

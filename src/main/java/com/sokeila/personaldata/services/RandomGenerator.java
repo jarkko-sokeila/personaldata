@@ -20,4 +20,8 @@ public abstract class RandomGenerator {
 
         return list.get(randomGenerator.nextInt(list.size()));
     }
+
+    protected Random getRandomGenerator() {
+        return randomGenerator;
+    }
 }
