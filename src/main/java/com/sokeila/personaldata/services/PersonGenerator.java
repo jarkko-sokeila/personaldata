@@ -57,12 +57,14 @@ public class PersonGenerator extends RandomGenerator {
         person.setLastName(getRandomLastname(country));
         person.setEmail(getRandomEmail(person.getFirstName(), person.getLastName()));
         person.setPhone(phoneNumberGenerator.generatePhoneNumber(country));
+        person.setMaritalStatus(getMaritalStatus(person.getAge()));
         person.setPhysical(generatePhysical());
         person.setCompany(getRandomCompany());
         person.setBankInformation(getBankInformation(country));
         person.setAddress(addressGenerator.generateAddress(country));
         person.setGeo(getRandomGeo());
         person.setOnline(onlineGenerator.generateOnline(person.getFirstName(), person.getLastName()));
+        person.setCar(getRandomCar());
 
         return person;
     }
@@ -109,6 +111,18 @@ public class PersonGenerator extends RandomGenerator {
         String domain = getRandomValue(DataGenerator.getEmailDomains());
 
         return firstName.toLowerCase() + "." + lastName.toLowerCase() + "@" + domain;
+    }
+
+    private String getMaritalStatus(Integer age) {
+        if(age < 18) {
+            return "Single";
+        } else if(age > 18 && age < 30) {
+            return getRandomValue(Arrays.asList("Married", "Single"));
+        } else if(age > 18 && age < 55) {
+            return getRandomValue(Arrays.asList("Married", "Single", "Divorced"));
+        }
+
+        return getRandomValue(Arrays.asList("Married", "Single", "Divorced", "Widowed"));
     }
 
     private Country getRandomNationality() {
@@ -175,5 +189,13 @@ public class PersonGenerator extends RandomGenerator {
         geo.setGeoCoordinates(latitude + ", " + longitude);
 
         return geo;
+    }
+
+    private Car getRandomCar() {
+        Car car = new Car();
+        car.setModel(getRandomValue(DataGenerator.getCarModels()));
+        car.setYear(RandomUtils.getRandomNumber(1970, 2022));
+
+        return car;
     }
 }

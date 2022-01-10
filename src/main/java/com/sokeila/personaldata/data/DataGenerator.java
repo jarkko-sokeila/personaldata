@@ -24,6 +24,7 @@ public class DataGenerator {
     private static final Set<String> companyNames = new HashSet<>();
     private static final Map<Country, Set<String>> addresses = new HashMap<>();
     private static final Map<Country, Set<String>> streets = new HashMap<>();
+    private static final Set<String> carModels = new HashSet<>();
 
     static {
         try {
@@ -33,6 +34,7 @@ public class DataGenerator {
             loadCompanyNames();
             loadAddresses();
             loadStreets();
+            loadCarModels();
         } catch (IOException e) {
             log.error("Error while loading data", e);
         }
@@ -80,6 +82,10 @@ public class DataGenerator {
         Set<String> values = getValuesFromMap(country, streets);
 
         return new ArrayList<>(values);
+    }
+
+    public static List<String> getCarModels() {
+        return new ArrayList<>(carModels);
     }
 
     private static Set<String> getValuesFromMap(Country country, Map<Country, Set<String>> valuesMap) {
@@ -176,6 +182,14 @@ public class DataGenerator {
                 log.warn("Could not load streets for country " + country);
                 log.debug("Error", e);
             }
+        }
+    }
+
+    private static void loadCarModels() throws IOException {
+        InputStream resource = new ClassPathResource("data/car/car.txt").getInputStream();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8)) ) {
+            Set<String> carModelData = reader.lines().collect(Collectors.toSet());
+            carModels.addAll(carModelData);
         }
     }
 

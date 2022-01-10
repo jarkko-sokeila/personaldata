@@ -13,6 +13,7 @@ public class Person {
     private String lastName;
     private String email;
     private Phone phone;
+    private String maritalStatus;
 
     private Address address;
     private Physical physical;
@@ -20,6 +21,7 @@ public class Person {
     private BankInformation bankInformation;
     private Geo geo;
     private Online online;
+    private Car car;
 
     public String getGuid() {
         return guid;
@@ -101,6 +103,14 @@ public class Person {
         this.phone = phone;
     }
 
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
     public Address getAddress() {
         return address;
     }
@@ -147,5 +157,13 @@ public class Person {
 
     public void setOnline(Online online) {
         this.online = online;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
     }
 }

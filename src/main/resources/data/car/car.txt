@@ -1,0 +1,24 @@
+Audi A3
+BMW i3
+Ford Focus
+Ford Transit
+Honda Accord
+Honda Civic
+Honda CR-V
+Hyundai Sonata
+Land Rover Range Rover
+Mazda 3
+Mazda 6
+Mercedes-Benz C-Class
+Mercedes-Benz S-Class
+Mitsubishi Lancer
+Nissan Micra
+Opel Astra
+Opel Corsa
+Peugeot 206
+Renault Clio
+Škoda Octavia
+Subaru Legacy
+Tesla Model S
+Toyota Corolla
+Volkswagen Golf
