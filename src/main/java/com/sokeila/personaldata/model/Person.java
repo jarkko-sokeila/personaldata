@@ -1,5 +1,7 @@
 package com.sokeila.personaldata.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.time.LocalDate;
 
 public class Person {
@@ -10,7 +12,9 @@ public class Person {
     private String ssn;
     private Integer age;
     private String firstName;
+    private String middleName;
     private String lastName;
+    private String initials;
     private String email;
     private Phone phone;
     private String maritalStatus;
@@ -77,6 +81,16 @@ public class Person {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+        generateInitials();
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+        generateInitials();
     }
 
     public String getLastName() {
@@ -85,6 +99,11 @@ public class Person {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+        generateInitials();
+    }
+
+    public String getInitials() {
+        return initials;
     }
 
     public String getEmail() {
@@ -165,5 +184,18 @@ public class Person {
 
     public void setCar(Car car) {
         this.car = car;
+    }
+
+    private void generateInitials() {
+        this.initials = "";
+        if(StringUtils.isNotBlank(firstName)) {
+            this.initials += firstName.substring(0, 1). toUpperCase() + ".";
+        }
+        if(StringUtils.isNotBlank(middleName)) {
+            this.initials += " " + middleName.substring(0, 1). toUpperCase() + ".";
+        }
+        if(StringUtils.isNotBlank(lastName)) {
+            this.initials += " " + lastName.substring(0, 1). toUpperCase() + ".";
+        }
     }
 }

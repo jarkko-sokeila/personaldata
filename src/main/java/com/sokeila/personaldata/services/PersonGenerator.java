@@ -54,6 +54,7 @@ public class PersonGenerator extends RandomGenerator {
         person.setSsn(ssnGenerator.generateSsn(country, gender, person.getBirthDate()));
         person.setAge(calculateAge(person.getBirthDate()));
         person.setFirstName(getRandomFirstName(country, gender));
+        person.setMiddleName(getRandomFirstName(country, gender));
         person.setLastName(getRandomLastname(country));
         person.setEmail(getRandomEmail(person.getFirstName(), person.getLastName()));
         person.setPhone(phoneNumberGenerator.generatePhoneNumber(country));
