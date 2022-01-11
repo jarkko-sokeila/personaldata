@@ -1,7 +1,7 @@
 package com.sokeila.personaldata.services;
 
 import com.sokeila.personaldata.model.Country;
-import com.sokeila.personaldata.model.Sex;
+import com.sokeila.personaldata.model.Gender;
 import com.sokeila.personaldata.utils.RandomUtils;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ public class SsnGenerator {
 
     private final char[] checkSigns = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y'};
 
-    public String generateSsn(Country country, Sex sex, LocalDate birthDate) {
+    public String generateSsn(Country country, Gender gender, LocalDate birthDate) {
         String ssn = null;
         if(country == Country.FINLAND) {
             String date = "" + birthDate.getDayOfMonth();
@@ -22,7 +22,7 @@ public class SsnGenerator {
             }
             String year = "" + birthDate.getYear();
             year = year.substring(2);
-            String individualNimber = generateIndividualNumber(sex);
+            String individualNimber = generateIndividualNumber(gender);
 
             String number = date + month + year + individualNimber;
 
@@ -44,12 +44,12 @@ public class SsnGenerator {
         return ssn;
     }
 
-    private String generateIndividualNumber(Sex sex) {
+    private String generateIndividualNumber(Gender gender) {
         int individualNumber = RandomUtils.getRandomNumber(2, 899);
 
-        if(sex == Sex.FEMALE & individualNumber % 2 != 0) {
+        if(gender == Gender.FEMALE & individualNumber % 2 != 0) {
             individualNumber++;
-        } else if(sex == Sex.MALE & individualNumber % 2 == 0) {
+        } else if(gender == Gender.MALE & individualNumber % 2 == 0) {
             individualNumber++;
         }
 

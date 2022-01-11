@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Person {
     private String guid;
     private Country country;
-    private Sex sex;
+    private Gender gender;
     private LocalDate birthDate;
     private String ssn;
     private Integer age;
@@ -39,12 +39,12 @@ public class Person {
         this.country = country;
     }
 
-    public Sex getSex() {
-        return sex;
+    public Gender getGender() {
+        return gender;
     }
 
-    public void setSex(Sex sex) {
-        this.sex = sex;
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     public String getSsn() {

@@ -1,5 +1,5 @@
 package com.sokeila.personaldata.model;
 
-public enum Sex {
+public enum Gender {
     FEMALE, MALE
 }

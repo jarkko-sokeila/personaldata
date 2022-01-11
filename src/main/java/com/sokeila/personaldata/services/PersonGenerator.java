@@ -44,16 +44,16 @@ public class PersonGenerator extends RandomGenerator {
         if(country == null) {
             country = getRandomNationality();
         }
-        Sex sex = getRandomSex();
+        Gender gender = getRandomGender();
 
         Person person = new Person();
         person.setGuid(UUID.randomUUID().toString());
         person.setCountry(country);
-        person.setSex(sex);
+        person.setGender(gender);
         person.setBirthDate(getRandomBirthDate());
-        person.setSsn(ssnGenerator.generateSsn(country, sex, person.getBirthDate()));
+        person.setSsn(ssnGenerator.generateSsn(country, gender, person.getBirthDate()));
         person.setAge(calculateAge(person.getBirthDate()));
-        person.setFirstName(getRandomFirstName(country, sex));
+        person.setFirstName(getRandomFirstName(country, gender));
         person.setLastName(getRandomLastname(country));
         person.setEmail(getRandomEmail(person.getFirstName(), person.getLastName()));
         person.setPhone(phoneNumberGenerator.generatePhoneNumber(country));
@@ -97,9 +97,9 @@ public class PersonGenerator extends RandomGenerator {
         return (int) years;
     }
 
-    private String getRandomFirstName(Country country, Sex sex) {
-        log.info("Get random first name. Country {}, sex {}", country, sex);
-        return getRandomValue(DataGenerator.getFirstNames(sex, country));
+    private String getRandomFirstName(Country country, Gender gender) {
+        log.info("Get random first name. Country {}, Gender {}", country, gender);
+        return getRandomValue(DataGenerator.getFirstNames(gender, country));
     }
 
     private String getRandomLastname(Country country) {
@@ -131,8 +131,8 @@ public class PersonGenerator extends RandomGenerator {
         return getRandomValue(list);
     }
 
-    private Sex getRandomSex() {
-        List<Sex> list = Arrays.asList(Sex.values());
+    private Gender getRandomGender() {
+        List<Gender> list = Arrays.asList(Gender.values());
 
         return getRandomValue(list);
     }

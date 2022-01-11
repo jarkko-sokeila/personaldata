@@ -1,7 +1,7 @@
 package com.sokeila.personaldata.data;
 
 import com.sokeila.personaldata.model.Country;
-import com.sokeila.personaldata.model.Sex;
+import com.sokeila.personaldata.model.Gender;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class DataGenerator {
     private static final Logger log = LoggerFactory.getLogger(DataGenerator.class);
 
-    private static final Map<Sex, Map<Country, Set<String>>> firstNames = new HashMap<>();
+    private static final Map<Gender, Map<Country, Set<String>>> firstNames = new HashMap<>();
     private static final Map<Country, Set<String>> lastNames = new HashMap<>();
     private static final Set<String> emailDomains = new HashSet<>();
     private static final Set<String> companyNames = new HashSet<>();
@@ -40,11 +40,11 @@ public class DataGenerator {
         }
     }
 
-    public static List<String> getFirstNames(Sex sex, Country country) {
-        Objects.requireNonNull(sex, "Sex is mandatory");
+    public static List<String> getFirstNames(Gender gender, Country country) {
+        Objects.requireNonNull(gender, "Gender is mandatory");
         Objects.requireNonNull(country, "Country is mandatory");
 
-        Map<Country, Set<String>> firstNameMap = firstNames.get(sex);
+        Map<Country, Set<String>> firstNameMap = firstNames.get(gender);
         Set<String> names = getValuesFromMap(country, firstNameMap);
 
         return new ArrayList<>(names);
@@ -100,13 +100,13 @@ public class DataGenerator {
     }
 
     private static void loadFirstNames() throws IOException {
-        loadFirstNames(Sex.FEMALE, null,"data/firstnames/females.txt");
-        loadFirstNames(Sex.MALE, null,"data/firstnames/males.txt");
+        loadFirstNames(Gender.FEMALE, null, "data/firstnames/females.txt");
+        loadFirstNames(Gender.MALE, null, "data/firstnames/males.txt");
 
         for(Country country : Country.values()) {
             try {
                 String femalesNamesFile = "data/firstnames/females_" + country.getLocale() + ".txt";
-                loadFirstNames(Sex.FEMALE, country, femalesNamesFile);
+                loadFirstNames(Gender.FEMALE, country, femalesNamesFile);
             } catch (IOException e) {
                 log.warn("Could not load female names for country " + country);
                 log.debug("Error", e);
@@ -114,7 +114,7 @@ public class DataGenerator {
 
             try {
                 String malesNamesFile = "data/firstnames/males_" + country.getLocale() + ".txt";
-                loadFirstNames(Sex.MALE, country, malesNamesFile);
+                loadFirstNames(Gender.MALE, country, malesNamesFile);
             } catch (IOException e) {
                 log.warn("Could not load male names for country " + country);
                 log.debug("Error", e);
@@ -122,11 +122,11 @@ public class DataGenerator {
         }
     }
 
-    private static void loadFirstNames(Sex sex, Country country, String source) throws IOException {
+    private static void loadFirstNames(Gender gender, Country country, String source) throws IOException {
         InputStream resource = new ClassPathResource(source).getInputStream();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8))) {
             Set<String> names = reader.lines().collect(Collectors.toSet());
-            Map<Country, Set<String>> nameMap = firstNames.computeIfAbsent(sex, k -> new HashMap<>());
+            Map<Country, Set<String>> nameMap = firstNames.computeIfAbsent(gender, k -> new HashMap<>());
             nameMap.put(country, names);
         }
     }
