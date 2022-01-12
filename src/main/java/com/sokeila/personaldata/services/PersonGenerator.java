@@ -143,6 +143,7 @@ public class PersonGenerator extends RandomGenerator {
 
         physical.setBloodType(generateRandomBloodType());
         physical.setHairColor(getRandomValue(Arrays.asList("Black", "White", "Gray", "Red", "Light brown", "Brown", "Dark brown", "Blond")));
+        physical.setEyesColor(getRandomValue(Arrays.asList("Brown", "Green", "Blue", "Hazel")));
 
         return physical;
     }
