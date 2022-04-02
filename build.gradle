@@ -1,7 +1,7 @@
 import org.gradle.internal.jvm.Jvm
 
 plugins {
-    id 'org.springframework.boot' version '2.6.3'
+    id 'org.springframework.boot' version '2.6.5'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
 }
@@ -23,7 +23,8 @@ repositories {
     mavenCentral()
 
     maven {
-        url 'https://sokeila.jfrog.io/artifactory/Common-Utils/'
+        url 'http://185-167-96-63.cloud-xip.io:9092/artifactory/Common-Utils/'
+        allowInsecureProtocol = true
         credentials {
             username = "anonymous"
             password = ""
@@ -32,12 +33,12 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.3'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.5'
 
     implementation 'com.sokeila:common-utils:1.0'
 
-    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.6.3'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.3'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.6.5'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.5'
 }
 
 test {

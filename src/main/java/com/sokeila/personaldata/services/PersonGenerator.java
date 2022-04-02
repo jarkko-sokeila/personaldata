@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -51,6 +53,7 @@ public class PersonGenerator extends RandomGenerator {
         person.setCountry(country);
         person.setGender(gender);
         person.setBirthDate(getRandomBirthDate());
+        person.setBirthDateString(formatBirthDate(person.getBirthDate(), country));
         person.setSsn(ssnGenerator.generateSsn(country, gender, person.getBirthDate()));
         person.setAge(calculateAge(person.getBirthDate()));
         person.setFirstName(getRandomFirstName(country, gender));
@@ -68,6 +71,10 @@ public class PersonGenerator extends RandomGenerator {
         person.setCar(getRandomCar());
 
         return person;
+    }
+
+    private String formatBirthDate(LocalDate birthDate, Country country) {
+        return birthDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(country.getLocale()));
     }
 
     private LocalDate getRandomBirthDate() {

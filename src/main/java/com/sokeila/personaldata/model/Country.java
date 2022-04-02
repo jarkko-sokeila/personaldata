@@ -2,22 +2,24 @@ package com.sokeila.personaldata.model;
 
 import com.sokeila.personaldata.services.bank.IBAN;
 
-public enum Country {
-    FINLAND("fi", IBAN.FI), UNITED_STATES("us");
+import java.util.Locale;
 
-    private final String locale;
+public enum Country {
+    FINLAND(new Locale("fi"), IBAN.FI), UNITED_STATES(Locale.US);
+
+    private final Locale locale;
     private IBAN iban;
 
-    Country(String locale, IBAN iban) {
+    Country(Locale locale, IBAN iban) {
         this.locale = locale;
         this.iban = iban;
     }
 
-    Country(String locale) {
+    Country(Locale locale) {
         this.locale = locale;
     }
 
-    public String getLocale() {
+    public Locale getLocale() {
         return locale;
     }
 
@@ -25,9 +27,13 @@ public enum Country {
         return iban;
     }
 
+    public String getLanguage() {
+        return locale.getLanguage();
+    }
+
     public static Country fromString(String text) {
         for (Country c : Country.values()) {
-            if (c.locale.equalsIgnoreCase(text) || c.toString().equalsIgnoreCase(text)) {
+            if (c.locale.getCountry().equalsIgnoreCase(text) || c.toString().equalsIgnoreCase(text)) {
                 return c;
             }
         }

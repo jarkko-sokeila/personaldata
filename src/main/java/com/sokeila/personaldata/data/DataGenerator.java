@@ -105,7 +105,7 @@ public class DataGenerator {
 
         for(Country country : Country.values()) {
             try {
-                String femalesNamesFile = "data/firstnames/females_" + country.getLocale() + ".txt";
+                String femalesNamesFile = "data/firstnames/females_" + country.getLanguage() + ".txt";
                 loadFirstNames(Gender.FEMALE, country, femalesNamesFile);
             } catch (IOException e) {
                 log.warn("Could not load female names for country " + country);
@@ -113,7 +113,7 @@ public class DataGenerator {
             }
 
             try {
-                String malesNamesFile = "data/firstnames/males_" + country.getLocale() + ".txt";
+                String malesNamesFile = "data/firstnames/males_" + country.getLanguage() + ".txt";
                 loadFirstNames(Gender.MALE, country, malesNamesFile);
             } catch (IOException e) {
                 log.warn("Could not load male names for country " + country);
@@ -136,7 +136,7 @@ public class DataGenerator {
 
         for(Country country : Country.values()) {
             try {
-                String lastNamesFile = "data/lastnames/lastnames_" + country.getLocale() + ".txt";
+                String lastNamesFile = "data/lastnames/lastnames_" + country.getLanguage() + ".txt";
                 loadCountryData(country, lastNamesFile, lastNames);
             } catch (IOException e) {
                 log.warn("Could not load last names for country " + country);
@@ -162,7 +162,7 @@ public class DataGenerator {
 
         for(Country country : Country.values()) {
             try {
-                String citiesFile = "data/address/city_" + country.getLocale() + ".txt";
+                String citiesFile = "data/address/city_" + country.getLanguage() + ".txt";
                 loadCountryData(country, citiesFile, addresses);
             } catch (IOException e) {
                 log.warn("Could not load cities for country " + country);
@@ -176,7 +176,7 @@ public class DataGenerator {
 
         for(Country country : Country.values()) {
             try {
-                String streetsFile = "data/address/street_" + country.getLocale() + ".txt";
+                String streetsFile = "data/address/street_" + country.getLanguage() + ".txt";
                 loadCountryData(country, streetsFile, streets);
             } catch (IOException e) {
                 log.warn("Could not load streets for country " + country);

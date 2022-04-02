@@ -1,14 +1,21 @@
 package com.sokeila.personaldata.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 
+@JsonPropertyOrder({ "guid", "country", "gender", "birthDateString", "ssn" })
 public class Person {
     private String guid;
     private Country country;
     private Gender gender;
+    @JsonIgnore
     private LocalDate birthDate;
+    @JsonProperty(value = "birthDate")
+    private String birthDateString;
     private String ssn;
     private Integer age;
     private String firstName;
@@ -65,6 +72,14 @@ public class Person {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public String getBirthDateString() {
+        return birthDateString;
+    }
+
+    public void setBirthDateString(String birthDateString) {
+        this.birthDateString = birthDateString;
     }
 
     public Integer getAge() {

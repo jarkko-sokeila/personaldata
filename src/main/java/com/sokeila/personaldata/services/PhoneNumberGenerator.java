@@ -44,9 +44,9 @@ public class PhoneNumberGenerator extends RandomGenerator {
 
         switch (country) {
             case FINLAND:
-                countryCode = properties.getProperty("phonenumber.country-code." + country.getLocale(), "+358");
-                length = properties.getProperty("phonenumber.length." + country.getLocale(), "10");
-                phonenumberPrefixes = properties.getProperty("phonenumber.prefixes." + country.getLocale(), "");
+                countryCode = properties.getProperty("phonenumber.country-code." + country.getLanguage(), "+358");
+                length = properties.getProperty("phonenumber.length." + country.getLanguage(), "10");
+                phonenumberPrefixes = properties.getProperty("phonenumber.prefixes." + country.getLanguage(), "");
                 phone = generatePhoneNumber(countryCode, length, phonenumberPrefixes);
                 phone.setFullNumber(phone.getCountryCode() + phone.getPhoneNumber().substring(1));
                 return phone;
