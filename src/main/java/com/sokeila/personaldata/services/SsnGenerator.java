@@ -10,13 +10,16 @@ import java.time.LocalDate;
 @Service
 public class SsnGenerator {
 
-    private final char[] checkSigns = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y'};
+    public static final char[] checkSigns = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y'};
 
     public String generateSsn(Country country, Gender gender, LocalDate birthDate) {
         String ssn = null;
         if(country == Country.FINLAND) {
             String date = "" + birthDate.getDayOfMonth();
             String month = "" + birthDate.getMonthValue();
+            if(date.length() == 1) {
+                date = "0" + date;
+            }
             if(month.length() == 1) {
                 month = "0" + month;
             }
