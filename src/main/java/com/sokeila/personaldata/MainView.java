@@ -109,9 +109,15 @@ public class MainView extends VerticalLayout {
             }
         });
         Button copyToClipboard = new Button("Copy to clipboard", VaadinIcon.COPY.create());
+        copyToClipboard.setEnabled(false);
         copyToClipboard.addClickListener(
                 e -> UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", data.getValue())
         );
+
+        data.addValueChangeListener(event -> {
+           String value = event.getValue();
+            copyToClipboard.setEnabled(StringUtils.isNotBlank(value));
+        });
 
         layout.addAndExpand(generateButton, copyToClipboard, data);
         layout.setPadding(false);
