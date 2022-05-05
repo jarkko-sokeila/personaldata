@@ -4,7 +4,10 @@ plugins {
     id 'org.springframework.boot' version '2.6.5'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'com.vaadin' version '23.0.8'
 }
+
+defaultTasks("clean", "build")
 
 group = 'com.sokeila'
 version = '0.0.1-SNAPSHOT'
@@ -14,6 +17,10 @@ def currentJvm = Jvm.current()
 println currentJvm
 
 println GradleVersion.current().toString()
+
+ext {
+    set('vaadinVersion', "23.0.8")
+}
 
 jar {
     enabled = false
@@ -32,13 +39,29 @@ repositories {
     }
 }
 
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.5'
+    implementation('com.vaadin:vaadin-spring-boot-starter')
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.7'
 
     implementation 'com.sokeila:common-utils:1.0'
 
-    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.6.5'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.5'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.6.7'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "com.vaadin:vaadin-bom:$vaadinVersion"
+    }
 }
 
 test {
