@@ -13,9 +13,11 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -30,75 +32,89 @@ import java.util.Locale;
 @JsModule("./js/copytoclipboard.js")
 public class MainView extends VerticalLayout {
 
-    private PersonGenerator personGenerator;
+    private final PersonGenerator personGenerator;
 
     private final SsnGenerator ssnGenerator;
     private final SsnValidator ssnValidator;
+
+    private TextField ssnField;
 
     public MainView(PersonGenerator personGenerator, SsnGenerator ssnGenerator, SsnValidator ssnValidator) {
         this.personGenerator = personGenerator;
         this.ssnGenerator = ssnGenerator;
         this.ssnValidator = ssnValidator;
 
-        addSsnGenerator();
-        addSsnValidator();
+        FormLayout formLayout = new FormLayout();
+        formLayout.setMaxWidth("660px");
+        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 3));
+        addSsnGenerator(formLayout);
+        addSsnValidator(formLayout);
+        add(formLayout);
+
         add(new Hr());
+
         addPersonData();
     }
 
-    private void addSsnGenerator() {
-        HorizontalLayout layout = new HorizontalLayout();
+    private void addSsnGenerator(FormLayout formLayout) {
+        //HorizontalLayout layout = new HorizontalLayout();
 
-        DatePicker datePicker = new DatePicker("Birth date");
+        DatePicker datePicker = new DatePicker("Syntymäpäivä");
         datePicker.setLocale(new Locale("fi"));
+        datePicker.setPlaceholder("Anna syntymäpäivä");
 
         Span ssn = new Span("");
         ssn.getStyle().set("padding-bottom", "10px");
-        Button generateSsnButton = new Button("Generate ssn", event -> {
+        Button generateSsnButton = new Button("Luo tunnus", event -> {
             LocalDate birthDate = datePicker.getValue();
             if(birthDate != null) {
                 String ssnValue = ssnGenerator.generateSsn(Country.FINLAND, Gender.MALE, birthDate);
                 ssn.setText(ssnValue);
+                if(ssnField != null) {
+                    ssnField.setValue(ssnValue);
+                }
             } else {
-                ssn.setText("Set birthdate first");
+                ssn.setText("Anna syntymäpäivä");
             }
         });
 
-        layout.add(datePicker, generateSsnButton, ssn);
-        layout.setVerticalComponentAlignment(Alignment.END, generateSsnButton, ssn);
+        formLayout.add(datePicker, generateSsnButton, ssn);
+        //layout.setVerticalComponentAlignment(Alignment.END, generateSsnButton, ssn);
 
-        add(layout);
+        //add(layout);
     }
 
-    private void addSsnValidator() {
-        HorizontalLayout layout = new HorizontalLayout();
+    private void addSsnValidator(FormLayout formLayout) {
+        //HorizontalLayout layout = new HorizontalLayout();
 
-        TextField ssnField = new TextField("Ssn");
-        ssnField.setPlaceholder("Give ssn");
+        ssnField = new TextField("Henkilötunnus");
+        ssnField.setPlaceholder("Anna henkilötunnus");
 
         Span info = new Span("");
         info.getStyle().set("padding-bottom", "10px");
-        Button validateSsnButton = new Button("Validate ssn", event -> {
+        Button validateSsnButton = new Button("Tarkista tunnus", event -> {
             String ssn = ssnField.getValue();
             if(StringUtils.isNotBlank(ssn) && ssnValidator.validateSsn(ssn)) {
-                info.setText("Ssn is valid");
+                info.setText("Henkilötunnus on validi");
             } else {
-                info.setText("Not valid");
+                info.setText("Henkilötunnus ei ole validi!");
             }
         });
 
-        layout.add(ssnField, validateSsnButton, info);
-        layout.setVerticalComponentAlignment(Alignment.END, validateSsnButton, info);
+        formLayout.add(ssnField, validateSsnButton, info);
+        //layout.setVerticalComponentAlignment(Alignment.END, validateSsnButton, info);
 
-        add(layout);
+        //add(layout);
     }
 
     private void addPersonData() {
         VerticalLayout layout = new VerticalLayout();
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.setPadding(false);
 
         TextArea data = new TextArea();
         data.setMinWidth("360px");
-        Button generateButton = new Button("Generate person data", event -> {
+        Button generateButton = new Button("Generoi henkilö", event -> {
             Person person = personGenerator.generatePerson();
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
             try {
@@ -108,18 +124,20 @@ public class MainView extends VerticalLayout {
                 throw new RuntimeException(e);
             }
         });
-        Button copyToClipboard = new Button("Copy to clipboard", VaadinIcon.COPY.create());
+        Button copyToClipboard = new Button("Kopioi leikepöydälle", VaadinIcon.COPY.create());
         copyToClipboard.setEnabled(false);
-        copyToClipboard.addClickListener(
-                e -> UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", data.getValue())
-        );
+        copyToClipboard.addClickListener(e -> {
+            UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", data.getValue());
+            Notification.show("Kopioitu leikepöydälle", 5000, Notification.Position.BOTTOM_START);
+        });
 
         data.addValueChangeListener(event -> {
            String value = event.getValue();
             copyToClipboard.setEnabled(StringUtils.isNotBlank(value));
         });
 
-        layout.addAndExpand(generateButton, copyToClipboard, data);
+        horizontalLayout.add(generateButton, copyToClipboard);
+        layout.addAndExpand(horizontalLayout, data);
         layout.setPadding(false);
 
         add(layout);
