@@ -25,9 +25,9 @@ public class SsnGenerator {
             }
             String year = "" + birthDate.getYear();
             year = year.substring(2);
-            String individualNimber = generateIndividualNumber(gender);
+            String individualNumber = generateIndividualNumber(gender);
 
-            String number = date + month + year + individualNimber;
+            String number = date + month + year + individualNumber;
 
             int remainder = Integer.parseInt(number) % 31;
             char checkSign = checkSigns[remainder];
@@ -41,7 +41,7 @@ public class SsnGenerator {
                 decade = "A";
             }
 
-            ssn = date + month + year + decade + individualNimber + checkSign;
+            ssn = date + month + year + decade + individualNumber + checkSign;
         }
 
         return ssn;
