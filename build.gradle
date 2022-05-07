@@ -67,3 +67,7 @@ dependencyManagement {
 test {
     useJUnitPlatform()
 }
+
+vaadin {
+    productionMode = true
+}

@@ -1,0 +1,13 @@
+# Git remote
+https://git.heroku.com/personal-data-generator-beta.git
+
+# Vaadin production mode in gradle
+vaadin {
+    productionMode = true
+}
+
+# Deploy jar
+heroku deploy:jar build/libs/personaldata-0.0.1-SNAPSHOT.jar --app personal-data-generator-beta
+
+# Tail log
+heroku logs --tail --remote heroku-beta
