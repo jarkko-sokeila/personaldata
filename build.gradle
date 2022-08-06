@@ -4,7 +4,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.2'
     id 'io.spring.dependency-management' version '1.0.12.RELEASE'
     id 'java'
-    id 'com.vaadin' version '23.0.8'
+    id 'com.vaadin' version '23.1.4'
 }
 
 defaultTasks("clean", "build")
@@ -19,7 +19,7 @@ println currentJvm
 println GradleVersion.current().toString()
 
 ext {
-    set('vaadinVersion', "23.0.8")
+    set('vaadinVersion', "23.1.4")
 }
 
 jar {
@@ -69,5 +69,5 @@ test {
 }
 
 vaadin {
-    productionMode = true
+    productionMode = false
 }
