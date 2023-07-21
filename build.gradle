@@ -1,14 +1,14 @@
 import org.gradle.internal.jvm.Jvm
 
 plugins {
-    id 'org.springframework.boot' version '2.7.6'
+    id 'org.springframework.boot' version '3.1.2'
     id 'io.spring.dependency-management' version '1.1.2'
     id 'java'
 }
 
 group = 'com.sokeila'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 def currentJvm = Jvm.current()
 println currentJvm
@@ -33,12 +33,12 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.6'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
     implementation 'com.sokeila:common-utils:1.0'
 
-    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.7.6'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.6'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
