@@ -1,0 +1,10 @@
+docker build -t personaldata .
+
+docker run -p 8080:8080 personaldata
+
+docker container rm <id>
+
+
+docker save -o C:/Ohjelmointi/docker/images/personaldata.tar personaldata
+
+docker load -i C:/Ohjelmointi/docker/images/personaldata.tar
