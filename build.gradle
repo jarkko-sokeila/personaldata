@@ -1,8 +1,8 @@
 import org.gradle.internal.jvm.Jvm
 
 plugins {
-    id 'org.springframework.boot' version '2.7.2'
-    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+    id 'org.springframework.boot' version '3.1.2'
+    id 'io.spring.dependency-management' version '1.1.2'
     id 'java'
     id 'com.vaadin' version '23.1.4'
 }
@@ -11,7 +11,7 @@ defaultTasks("clean", "build")
 
 group = 'com.sokeila'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 def currentJvm = Jvm.current()
 println currentJvm
@@ -47,12 +47,12 @@ configurations {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation('com.vaadin:vaadin-spring-boot-starter')
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.2'
 
     implementation 'com.sokeila:common-utils:1.0'
 
-    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.7.2'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
