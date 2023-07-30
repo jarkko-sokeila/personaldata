@@ -59,7 +59,7 @@ public class PersonGenerator extends RandomGenerator {
         person.setFirstName(getRandomFirstName(country, gender));
         person.setMiddleName(getRandomFirstName(country, gender));
         person.setLastName(getRandomLastname(country));
-        person.setEmail(getRandomEmail(person.getFirstName(), person.getLastName()));
+        setEmail(person);
         person.setPhone(phoneNumberGenerator.generatePhoneNumber(country));
         person.setMaritalStatus(getMaritalStatus(person.getAge()));
         person.setPhysical(generatePhysical());
@@ -115,10 +115,15 @@ public class PersonGenerator extends RandomGenerator {
         return getRandomValue(DataGenerator.getLastNames(country));
     }
 
-    private String getRandomEmail(String firstName, String lastName) {
+    private void setEmail(Person person) {
         String domain = getRandomValue(DataGenerator.getEmailDomains());
 
-        return firstName.toLowerCase() + "." + lastName.toLowerCase() + "@" + domain;
+        String email = person.getFirstName().toLowerCase() + person.getLastName().toLowerCase() + "@" + domain;
+        person.setEmail(email);
+        if(DataGenerator.isFakeMailDomain(domain)) {
+            String emailLink = "https://www.fakemailgenerator.com/#/" + domain + "/" + person.getFirstName().toLowerCase() + person.getLastName().toLowerCase() + "/";
+            person.setEmailLink(emailLink);
+        }
     }
 
     private String getMaritalStatus(Integer age) {

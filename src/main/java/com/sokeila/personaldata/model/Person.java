@@ -23,6 +23,7 @@ public class Person {
     private String lastName;
     private String initials;
     private String email;
+    private String emailLink;
     private Phone phone;
     private String maritalStatus;
 
@@ -127,6 +128,14 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getEmailLink() {
+        return emailLink;
+    }
+
+    public void setEmailLink(String emailLink) {
+        this.emailLink = emailLink;
     }
 
     public Phone getPhone() {
