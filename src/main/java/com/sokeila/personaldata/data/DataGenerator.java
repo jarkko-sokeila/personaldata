@@ -7,10 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,6 +18,7 @@ public class DataGenerator {
     private static final Map<Gender, Map<Country, Set<String>>> firstNames = new HashMap<>();
     private static final Map<Country, Set<String>> lastNames = new HashMap<>();
     private static final Set<String> emailDomains = new HashSet<>();
+    private static final Set<String> fakeMailDomains = new HashSet<>();
     private static final Set<String> companyNames = new HashSet<>();
     private static final Map<Country, Set<String>> addresses = new HashMap<>();
     private static final Map<Country, Set<String>> streets = new HashMap<>();
@@ -60,6 +58,10 @@ public class DataGenerator {
 
     public static List<String> getEmailDomains() {
         return new ArrayList<>(emailDomains);
+    }
+
+    public static boolean isFakeMailDomain(String domain) {
+        return fakeMailDomains.contains(domain);
     }
 
     public static List<String> getCompanyNames() {
@@ -107,24 +109,27 @@ public class DataGenerator {
             try {
                 String femalesNamesFile = "data/firstnames/females_" + country.getLanguage() + ".txt";
                 loadFirstNames(Gender.FEMALE, country, femalesNamesFile);
+            } catch (FileNotFoundException e) {
+                log.warn("Could not load female names for country {} code {}", country, country.getLanguage());
             } catch (IOException e) {
-                log.warn("Could not load female names for country " + country);
+                log.warn("Could not load female names for country {} code {}", country, country.getLanguage());
                 log.debug("Error", e);
             }
 
             try {
                 String malesNamesFile = "data/firstnames/males_" + country.getLanguage() + ".txt";
                 loadFirstNames(Gender.MALE, country, malesNamesFile);
+            } catch (FileNotFoundException e) {
+                log.warn("Could not load male names for country {} code {}", country, country.getLanguage());
             } catch (IOException e) {
-                log.warn("Could not load male names for country " + country);
+                log.warn("Could not load male names for country {} code {}", country, country.getLanguage());
                 log.debug("Error", e);
             }
         }
     }
 
     private static void loadFirstNames(Gender gender, Country country, String source) throws IOException {
-        InputStream resource = new ClassPathResource(source).getInputStream();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8))) {
+        try (InputStream resource = new ClassPathResource(source).getInputStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8))) {
             Set<String> names = reader.lines().collect(Collectors.toSet());
             Map<Country, Set<String>> nameMap = firstNames.computeIfAbsent(gender, k -> new HashMap<>());
             nameMap.put(country, names);
@@ -138,15 +143,19 @@ public class DataGenerator {
             try {
                 String lastNamesFile = "data/lastnames/lastnames_" + country.getLanguage() + ".txt";
                 loadCountryData(country, lastNamesFile, lastNames);
+            } catch (FileNotFoundException e) {
+                log.warn("Could not load last names for country {} code {}", country, country.getLanguage());
             } catch (IOException e) {
-                log.warn("Could not load last names for country " + country);
+                log.warn("Could not load last names for country {} code {}", country, country.getLanguage());
                 log.debug("Error", e);
             }
         }
     }
 
     private static void loadEmailDomains() {
+        fakeMailDomains.addAll(Arrays.asList("armyspy.com", "cuvox.de", "dayrep.com", "einrot.com", "fleckens.hu", "gustr.com", "jourrapide.com", "teleworm.us", "superrito.com"));
         emailDomains.addAll(Arrays.asList("gmail.com", "hotmail.com", "yahoo.com", "mail.com"));
+        emailDomains.addAll(fakeMailDomains);
     }
 
     private static void loadCompanyNames() throws IOException {
@@ -164,8 +173,10 @@ public class DataGenerator {
             try {
                 String citiesFile = "data/address/city_" + country.getLanguage() + ".txt";
                 loadCountryData(country, citiesFile, addresses);
+            } catch (FileNotFoundException e) {
+                log.warn("Could not load cities for country {} code {}", country, country.getLanguage());
             } catch (IOException e) {
-                log.warn("Could not load cities for country " + country);
+                log.warn("Could not load cities for country {} code {}", country, country.getLanguage());
                 log.debug("Error", e);
             }
         }
@@ -178,24 +189,24 @@ public class DataGenerator {
             try {
                 String streetsFile = "data/address/street_" + country.getLanguage() + ".txt";
                 loadCountryData(country, streetsFile, streets);
+            } catch (FileNotFoundException e) {
+                log.warn("Could not load streets for country {} code {}", country, country.getLanguage());
             } catch (IOException e) {
-                log.warn("Could not load streets for country " + country);
+                log.warn("Could not load streets for country {} code {}", country, country.getLanguage());
                 log.debug("Error", e);
             }
         }
     }
 
     private static void loadCarModels() throws IOException {
-        InputStream resource = new ClassPathResource("data/car/car.txt").getInputStream();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8)) ) {
+        try (InputStream resource = new ClassPathResource("data/car/car.txt").getInputStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8)) ) {
             Set<String> carModelData = reader.lines().collect(Collectors.toSet());
             carModels.addAll(carModelData);
         }
     }
 
     private static void loadCountryData(Country country, String source, Map<Country, Set<String>> dataMap) throws IOException {
-        InputStream resource = new ClassPathResource(source).getInputStream();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8))) {
+        try (InputStream resource = new ClassPathResource(source).getInputStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8))) {
             Set<String> data = reader.lines().collect(Collectors.toSet());
             dataMap.put(country, data);
         }

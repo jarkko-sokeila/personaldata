@@ -14,7 +14,7 @@ public abstract class RandomGenerator {
 
     protected <T> T getRandomValue(List<T> list) {
         Objects.requireNonNull(list, "List can't be null");
-        if(list.size() == 0) {
+        if(list.isEmpty()) {
             throw new IllegalArgumentException("List size is 0");
         }
 

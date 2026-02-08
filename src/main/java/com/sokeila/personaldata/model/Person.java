@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @JsonPropertyOrder({ "guid", "country", "gender", "birthDateString", "ssn" })
 public class Person {
@@ -23,6 +24,7 @@ public class Person {
     private String lastName;
     private String initials;
     private String email;
+    private String emailLink;
     private Phone phone;
     private String maritalStatus;
 
@@ -33,6 +35,7 @@ public class Person {
     private Geo geo;
     private Online online;
     private Car car;
+    private List<Person> children;
 
     public String getGuid() {
         return guid;
@@ -129,6 +132,14 @@ public class Person {
         this.email = email;
     }
 
+    public String getEmailLink() {
+        return emailLink;
+    }
+
+    public void setEmailLink(String emailLink) {
+        this.emailLink = emailLink;
+    }
+
     public Phone getPhone() {
         return phone;
     }
@@ -199,6 +210,14 @@ public class Person {
 
     public void setCar(Car car) {
         this.car = car;
+    }
+
+    public List<Person> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Person> children) {
+        this.children = children;
     }
 
     private void generateInitials() {

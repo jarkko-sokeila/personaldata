@@ -21,7 +21,7 @@ public class CreditCardGenerator extends RandomGenerator {
 
     public CreditCard generateCreditCard(CreditCardType creditCardType) {
         Objects.requireNonNull(creditCardType, "creditCardType can't be null");
-        log.info("Generate new {}", creditCardType);
+        log.info("Generate {}", creditCardType);
         CreditCard creditCard = new CreditCard();
         creditCard.setCreditCardType(creditCardType);
 
@@ -37,7 +37,7 @@ public class CreditCardGenerator extends RandomGenerator {
     private String generateRandomCreditCardNumber(CreditCardType creditCardType) {
         String prefix = getRandomValue(creditCardType.getCardPrefixNumbers());
 
-        // Numbers to generate depends length of prefix. Also last check number is deducted
+        // Numbers to generate depends on length of prefix. Also last check number is deducted
         int numbersToGenerate = creditCardType.getLength() - prefix.length() - 1;
         StringBuilder cardNumberBuilder = new StringBuilder();
         cardNumberBuilder.append(prefix);

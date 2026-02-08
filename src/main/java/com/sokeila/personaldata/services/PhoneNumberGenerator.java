@@ -40,36 +40,39 @@ public class PhoneNumberGenerator extends RandomGenerator {
         String countryCode;
         String length;
         Phone phone;
-        String phonenumberPrefixes;
+        String phoneNumberPrefixes;
 
         switch (country) {
-            case FINLAND:
-                countryCode = properties.getProperty("phonenumber.country-code." + country.getLanguage(), "+358");
-                length = properties.getProperty("phonenumber.length." + country.getLanguage(), "10");
-                phonenumberPrefixes = properties.getProperty("phonenumber.prefixes." + country.getLanguage(), "");
-                phone = generatePhoneNumber(countryCode, length, phonenumberPrefixes);
+            case FINLAND -> {
+                countryCode = properties.getProperty("phone-number.country-code." + country.getLanguage(), "+358");
+                length = properties.getProperty("phone-number.length." + country.getLanguage(), "10");
+                phoneNumberPrefixes = properties.getProperty("phone-number.prefixes." + country.getLanguage(), "");
+                phone = generatePhoneNumber(countryCode, length, phoneNumberPrefixes);
                 phone.setFullNumber(phone.getCountryCode() + phone.getPhoneNumber().substring(1));
                 return phone;
-            case UNITED_STATES:
-                countryCode = properties.getProperty("phonenumber.country-code", "+1");
-                length = properties.getProperty("phonenumber.length", "10");
-                phonenumberPrefixes = properties.getProperty("phonenumber.prefixes.", "");
-                phone = generatePhoneNumber(countryCode, length, phonenumberPrefixes);
+            }
+            case UNITED_STATES -> {
+                countryCode = properties.getProperty("phone-number.country-code", "+1");
+                length = properties.getProperty("phone-number.length", "10");
+                phoneNumberPrefixes = properties.getProperty("phone-number.prefixes.", "");
+                phone = generatePhoneNumber(countryCode, length, phoneNumberPrefixes);
                 phone.setFullNumber(phone.getCountryCode() + phone.getPhoneNumber());
                 return phone;
-            default:
+            }
+            default -> {
                 return null;
+            }
         }
     }
 
-    private Phone generatePhoneNumber(String countryCode, String lengthStr, String phonenumberPrefixes) {
+    private Phone generatePhoneNumber(String countryCode, String lengthStr, String phoneNumberPrefixes) {
         Phone phone = new Phone();
         phone.setCountryCode(countryCode);
         int length = Integer.parseInt(lengthStr);
         StringBuilder builder = new StringBuilder(length);
 
-        if(StringUtils.isNotBlank(phonenumberPrefixes)) {
-            List<String> items = Arrays.asList(phonenumberPrefixes.split(","));
+        if(StringUtils.isNotBlank(phoneNumberPrefixes)) {
+            List<String> items = Arrays.asList(phoneNumberPrefixes.split(","));
             String prefix = getRandomValue(items).trim();
             builder.append(prefix);
             length -= prefix.length();
