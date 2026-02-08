@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.ArrayList;
 
 @Service
 public class PersonGenerator extends RandomGenerator {
@@ -43,6 +44,10 @@ public class PersonGenerator extends RandomGenerator {
     }
 
     public Person generatePerson(Country country) {
+        return generatePerson(country, true);
+    }
+
+    public Person generatePerson(Country country, boolean generateChildren) {
         if(country == null) {
             country = getRandomNationality();
         }
@@ -69,6 +74,11 @@ public class PersonGenerator extends RandomGenerator {
         person.setGeo(getRandomGeo());
         person.setOnline(onlineGenerator.generateOnline(person.getFirstName(), person.getLastName()));
         person.setCar(getRandomCar());
+
+        // Generate children if requested and parent is old enough
+        if(generateChildren && person.getAge() >= 25) {
+            person.setChildren(generateChildrenList(person));
+        }
 
         return person;
     }
@@ -211,5 +221,59 @@ public class PersonGenerator extends RandomGenerator {
         car.setYear(RandomUtils.getRandomNumber(1970, 2022));
 
         return car;
+    }
+
+    private List<Person> generateChildrenList(Person parent) {
+        int numberOfChildren = RandomUtils.getRandomNumber(1, 3);
+        List<Person> children = new ArrayList<>();
+
+        for(int i = 0; i < numberOfChildren; i++) {
+            children.add(generateChild(parent));
+        }
+
+        return children;
+    }
+
+    private Person generateChild(Person parent) {
+        // Calculate child's birth date (20-30 years younger)
+        int yearsYounger = RandomUtils.getRandomNumber(20, 30);
+        LocalDate childBirthDate = parent.getBirthDate().plusYears(yearsYounger);
+
+        // Ensure child's birth date is not in the future
+        LocalDate now = LocalDate.now();
+        if(childBirthDate.isAfter(now)) {
+            childBirthDate = now.minusYears(1);
+        }
+
+        Gender childGender = getRandomGender();
+        Country country = parent.getCountry();
+
+        // Create child with same generation logic as parent
+        Person child = new Person();
+        child.setGuid(UUID.randomUUID().toString());
+        child.setCountry(country);
+        child.setGender(childGender);
+        child.setBirthDate(childBirthDate);
+        child.setBirthDateString(formatBirthDate(childBirthDate, country));
+        child.setSsn(ssnGenerator.generateSsn(country, childGender, childBirthDate));
+        child.setAge(calculateAge(childBirthDate));
+        child.setFirstName(getRandomFirstName(country, childGender));
+        child.setMiddleName(getRandomFirstName(country, childGender));
+        child.setLastName(parent.getLastName()); // CRITICAL: Same last name as parent
+        setEmail(child);
+        child.setPhone(phoneNumberGenerator.generatePhoneNumber(country));
+        child.setMaritalStatus(getMaritalStatus(child.getAge()));
+        child.setPhysical(generatePhysical());
+        child.setCompany(getRandomCompany());
+        child.setBankInformation(getBankInformation(country));
+        child.setAddress(addressGenerator.generateAddress(country));
+        child.setGeo(getRandomGeo());
+        child.setOnline(onlineGenerator.generateOnline(child.getFirstName(), child.getLastName()));
+        child.setCar(getRandomCar());
+
+        // CRITICAL: Prevent recursion - children do not have children
+        child.setChildren(null);
+
+        return child;
     }
 }

@@ -24,14 +24,19 @@ public class PersonalDataApi {
     }
 
     @RequestMapping(value = "person", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person getPerson(@RequestParam(required = false, name = "country") String country) {
+    public Person getPerson(
+            @RequestParam(required = false, name = "country") String country,
+            @RequestParam(required = false, name = "children", defaultValue = "true") Boolean includeChildren) {
         Country countryValue = Country.fromString(country);
 
-        return personGenerator.generatePerson(countryValue);
+        return personGenerator.generatePerson(countryValue, includeChildren);
     }
 
     @RequestMapping(value = "persons", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Person> getPersons(@RequestParam(name = "count") Integer count, @RequestParam(required = false, name = "country") String country) {
+    public List<Person> getPersons(
+            @RequestParam(name = "count") Integer count,
+            @RequestParam(required = false, name = "country") String country,
+            @RequestParam(required = false, name = "children", defaultValue = "true") Boolean includeChildren) {
         List<Person> result = new ArrayList<>();
         if(count < 0 || count > 1000) {
             return result;
@@ -40,7 +45,7 @@ public class PersonalDataApi {
         for(int i = 0; i < count; i++) {
             Country countryValue = Country.fromString(country);
 
-            result.add(personGenerator.generatePerson(countryValue));
+            result.add(personGenerator.generatePerson(countryValue, includeChildren));
         }
 
         return result;
