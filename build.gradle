@@ -1,14 +1,13 @@
 import org.gradle.internal.jvm.Jvm
 
 plugins {
-    id 'org.springframework.boot' version '3.1.2'
-    id 'io.spring.dependency-management' version '1.1.2'
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
     id 'java'
 }
 
 group = 'com.sokeila'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
 
 def currentJvm = Jvm.current()
 println currentJvm
